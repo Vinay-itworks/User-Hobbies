@@ -14,7 +14,12 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" %>
     <%= javascript_importmap_tags %>
+    <%= javascript_include_tag "https://code.jquery.com/jquery-3.7.1.min.js" %>
+    <%= javascript_include_tag "https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js" %>
+    <%= javascript_include_tag "https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js" %>
+    <%= javascript_include_tag "https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js" %>
   </head>
 
   <body>

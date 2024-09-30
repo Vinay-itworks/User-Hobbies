@@ -15,16 +15,34 @@ class UsersController < ApplicationController
     @user = User.new
   end
 
+  def hobby
+    @hobby = Hobby.new
+  end
+
+  def hobbycreate
+    print("Params = #{params}")
+    @hobby = Hobby.new(name: params["name"])
+    respond_to do |format|
+      if @hobby.save
+        format.html { redirect_to new_user_url, notice: "User was successfully created." }
+        format.json { render :show, status: :created, location: new_user_url }
+      else
+        format.html { render :hobby, status: :unprocessable_entity }
+        format.json { render json: @hobby.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   # GET /users/1/edit
   def edit
   end
 
   # POST /users or /users.json
   def create
-    @user = User.new(user_params)
-
+    @user = User.new(user_params.except("hobbies"))
     respond_to do |format|
       if @user.save
+        addhobbytouser(user_params[:hobbies], @user)
         format.html { redirect_to @user, notice: "User was successfully created." }
         format.json { render :show, status: :created, location: @user }
       else
@@ -37,7 +55,8 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1 or /users/1.json
   def update
     respond_to do |format|
-      if @user.update(user_params)
+      if @user.update(user_params.except("hobbies"))
+        addhobbytouser(user_params[:hobbies], @user)
         format.html { redirect_to @user, notice: "User was successfully updated." }
         format.json { render :show, status: :ok, location: @user }
       else
@@ -65,6 +84,14 @@ class UsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.require(:user).permit(:first_name, :last_name, :birthdate)
+      params.require(:user).permit(:first_name, :last_name, :birthdate, hobbies: [])
+    end
+
+    def addhobbytouser(hobbies, user)
+      user.hobbies = []
+      hobbies.reject(&:blank?).each { |id|
+          @hobby = Hobby.find(id)
+          user.hobbies << @hobby
+        }
     end
 end

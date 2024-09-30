@@ -14,4 +14,9 @@
     <%= user.birthdate %>
   </p>
 
+  <p>
+    <strong>Hobbies:</strong>
+    <%= user.hobbies.ids.map{|id| Hobby.find(id).name} %>
+  </p>
+
 </div>

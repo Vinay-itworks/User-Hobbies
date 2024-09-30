@@ -1,4 +1,6 @@
-<%= form_with(model: user) do |form| %>
+<%= javascript_include_tag "user_form_validation" %>
+
+<%= form_with(model: user, id: "new_user") do |form| %>
   <% if user.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
@@ -26,6 +28,15 @@
     <%= form.date_field :birthdate %>
   </div>
 
+  <div>
+    <%
+      hobbies = Hobby.all.pluck(:name, :id)
+      user_hobbies = user.hobbies.ids.uniq
+    %>
+    <%= form.label :hobbies, style: "display: block" %>
+    <%= form.select :hobbies, hobbies, { selected: user_hobbies }, class: "js-example-basic-multiple" , multiple: true, style: "width: 150px;" %> <%= link_to "New Hobby", user_add_hobby_path(user_id: 1) %>
+  </div>
+  <br/>
   <div>
     <%= form.submit %>
   </div>
